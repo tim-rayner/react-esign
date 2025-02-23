@@ -56,7 +56,7 @@ const SignatureInput = ({
   height = 150,
   themeColor = "#1976d2",
   strokeWidth = 2,
-  inputMode = "draw", //experimental
+  inputMode = "draw",
   buttonType = "button",
   download = false,
   clear = true,
@@ -69,34 +69,115 @@ const SignatureInput = ({
   const currentStrokeRef = useRef<{ x: number; y: number }[]>([]); // Current stroke
   const [typedSignature, setTypedSignature] = useState(""); // Holds user-typed signature
 
+  // Add these new refs to track scaling
+  const scaleRef = useRef<{ x: number; y: number }>({ x: 1, y: 1 });
+  const displaySizeRef = useRef<{ width: number; height: number }>({
+    width,
+    height,
+  });
+
   const initializeCanvas = useCallback((): void => {
     if (!signaturePadRef.current) return;
     const canvas = signaturePadRef.current;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const dpr = window.devicePixelRatio || 1;
-    const rect = canvas.getBoundingClientRect();
+    // Get the container width
+    const container = canvas.parentElement;
+    if (!container) return;
+    const containerWidth = container.clientWidth;
 
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-    ctx.scale(dpr, dpr);
+    // Calculate the scaled dimensions while maintaining aspect ratio
+    const scale = Math.min(
+      containerWidth / width,
+      containerWidth / (width * (height / width))
+    );
+    const scaledWidth = width * scale;
+    const scaledHeight = height * scale;
 
-    canvas.style.width = `${rect.width}px`;
-    canvas.style.height = `${rect.height}px`;
+    // Update display size ref
+    displaySizeRef.current = { width: scaledWidth, height: scaledHeight };
+
+    // Set the display size
+    canvas.style.width = `${scaledWidth}px`;
+    canvas.style.height = `${scaledHeight}px`;
+
+    // Set the internal canvas size (for consistent image export)
+    canvas.width = width;
+    canvas.height = height;
+
+    // Calculate scale factors
+    scaleRef.current = {
+      x: width / scaledWidth,
+      y: height / scaledHeight,
+    };
 
     ctx.lineWidth = strokeWidth;
     ctx.lineJoin = "round";
     ctx.strokeStyle = "#000";
     ctxRef.current = ctx;
-  }, []);
+  }, [width, height, strokeWidth]);
 
+  const redrawCanvasWithSmoothing = useCallback(() => {
+    if (!ctxRef.current) return;
+
+    // Clear the entire canvas
+    ctxRef.current.clearRect(
+      0,
+      0,
+      ctxRef.current.canvas.width,
+      ctxRef.current.canvas.height
+    );
+
+    // Reset the drawing style for each redraw
+    ctxRef.current.lineWidth = strokeWidth;
+    ctxRef.current.lineJoin = "round";
+    ctxRef.current.strokeStyle = "#000";
+
+    // Draw each stroke
+    strokesRef.current.forEach((stroke) => {
+      if (!ctxRef.current) return;
+      const smoothedStroke = smoothStroke(stroke);
+
+      ctxRef.current.beginPath();
+      ctxRef.current.moveTo(smoothedStroke[0].x, smoothedStroke[0].y);
+
+      for (let i = 1; i < smoothedStroke.length; i++) {
+        ctxRef.current.lineTo(smoothedStroke[i].x, smoothedStroke[i].y);
+      }
+
+      ctxRef.current.stroke();
+    });
+
+    // Draw typed signature after strokes
+    if (typedSignature) {
+      if (!ctxRef.current) return;
+      ctxRef.current.font = `italic ${
+        strokeWidth * 12
+      }px "Dancing Script", cursive`;
+      ctxRef.current.textAlign = "center";
+      ctxRef.current.fillStyle = "#000";
+      ctxRef.current.fillText(
+        typedSignature,
+        ctxRef.current.canvas.width / (2 * window.devicePixelRatio),
+        ctxRef.current.canvas.height / (2 * window.devicePixelRatio) + 10
+      );
+    }
+  }, [strokeWidth, typedSignature]);
+
+  // Add resize observer
   useEffect(() => {
-    initializeCanvas();
-    return () => {
-      ctxRef.current = null; // Cleanup
-    };
-  }, [initializeCanvas]);
+    const observer = new ResizeObserver(() => {
+      initializeCanvas();
+      redrawCanvasWithSmoothing();
+    });
+
+    if (signaturePadRef.current?.parentElement) {
+      observer.observe(signaturePadRef.current.parentElement);
+    }
+
+    return () => observer.disconnect();
+  }, [initializeCanvas, redrawCanvasWithSmoothing]);
 
   const handleClear = useCallback((): void => {
     if (!ctxRef.current) return;
@@ -120,11 +201,10 @@ const SignatureInput = ({
         ctxRef.current &&
         signaturePadRef.current
       ) {
-        console.log("handlePointerDown setting isDrawing to true");
         setIsDrawing(true);
         const rect = signaturePadRef.current.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
+        const x = (event.clientX - rect.left) * scaleRef.current.x;
+        const y = (event.clientY - rect.top) * scaleRef.current.y;
         ctxRef.current.beginPath();
         ctxRef.current.moveTo(x, y);
         currentStrokeRef.current = [{ x, y }];
@@ -144,8 +224,8 @@ const SignatureInput = ({
         return;
 
       const rect = signaturePadRef.current.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
+      const x = (event.clientX - rect.left) * scaleRef.current.x;
+      const y = (event.clientY - rect.top) * scaleRef.current.y;
 
       ctxRef.current.lineTo(x, y);
       ctxRef.current.stroke();
@@ -280,53 +360,6 @@ const SignatureInput = ({
     document.body.removeChild(link);
   }, []);
 
-  const redrawCanvasWithSmoothing = useCallback(() => {
-    if (!ctxRef.current) return;
-
-    // Clear the entire canvas
-    ctxRef.current.clearRect(
-      0,
-      0,
-      ctxRef.current.canvas.width,
-      ctxRef.current.canvas.height
-    );
-
-    // Reset the drawing style for each redraw
-    ctxRef.current.lineWidth = strokeWidth;
-    ctxRef.current.lineJoin = "round";
-    ctxRef.current.strokeStyle = "#000";
-
-    // Draw each stroke
-    strokesRef.current.forEach((stroke) => {
-      if (!ctxRef.current) return;
-      const smoothedStroke = smoothStroke(stroke);
-
-      ctxRef.current.beginPath();
-      ctxRef.current.moveTo(smoothedStroke[0].x, smoothedStroke[0].y);
-
-      for (let i = 1; i < smoothedStroke.length; i++) {
-        ctxRef.current.lineTo(smoothedStroke[i].x, smoothedStroke[i].y);
-      }
-
-      ctxRef.current.stroke();
-    });
-
-    // Draw typed signature after strokes
-    if (typedSignature) {
-      if (!ctxRef.current) return;
-      ctxRef.current.font = `italic ${
-        strokeWidth * 12
-      }px "Dancing Script", cursive`;
-      ctxRef.current.textAlign = "center";
-      ctxRef.current.fillStyle = "#000";
-      ctxRef.current.fillText(
-        typedSignature,
-        ctxRef.current.canvas.width / (2 * window.devicePixelRatio),
-        ctxRef.current.canvas.height / (2 * window.devicePixelRatio) + 10
-      );
-    }
-  }, [strokeWidth, typedSignature]);
-
   // Update canvas when typed signature changes
   useEffect(() => {
     redrawCanvasWithSmoothing();
@@ -340,17 +373,28 @@ const SignatureInput = ({
   };
 
   return (
-    <div className="signature-input-container">
+    <div
+      className="signature-input-container"
+      style={{
+        width: "100%", // Changed from maxWidth to width
+        maxWidth: `${width}px`,
+        minWidth: `${Math.min(width, 100)}px`, // Add minimum width
+      }}
+    >
       <canvas
         className={`drawing-canvas`}
         ref={signaturePadRef}
-        width={width}
-        height={height}
         style={{
           touchAction: "none",
+          width: "100%",
+          height: "100%", // Added height
+          maxWidth: `${width}px`,
+          aspectRatio: `${width} / ${height}`,
           ...borderStyles(),
         }}
       />
+
+      {/* Buttons Container */}
       <div
         style={{
           display: "flex",
