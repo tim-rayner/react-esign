@@ -1,7 +1,11 @@
 {
-  "name": "react-scribble",
-  "version": "1.0.0",
-  "description": "react-scribble is a lightweight, dependency free React component built for capturing handwritten signatures. It provides a simple and responsive signature pad, perfect for e-signatures, form authentication, or user confirmations in React applications",
+  "name": "react-esign",
+  "version": "1.0.1",
+  "description": "react-esign is a lightweight, dependency free React component built for capturing handwritten signatures. It provides a simple and responsive signature pad, perfect for e-signatures, form authentication, or user confirmations in React applications",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tim-rayner/react-esign"
+  },
   "author": "tim-rayner",
   "license": "MIT",
   "main": "dist/index.cjs.js",
@@ -19,8 +23,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "build": "npm run clean && rollup -c",
-    "prepare": "npm run build",
-    "publish": "npm publish --access public"
+    "prepare": "npm run build"
   },
   "peerDependencies": {
     "react": "^18.0.0",
@@ -52,6 +55,7 @@
     "signature-capture",
     "canvas",
     "component",
+    "esign",
     "ui"
   ]
 }

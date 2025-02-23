@@ -1,4 +1,4 @@
-import "./scribble.css";
+import "./esign.css";
 export type SignatureInputProps = {
     onChange: (value?: File) => void;
     isDisabled?: boolean;
