@@ -1,0 +1,57 @@
+{
+  "name": "react-scribble",
+  "version": "1.0.0",
+  "description": "react-scribble is a lightweight, dependency free React component built for capturing handwritten signatures. It provides a simple and responsive signature pad, perfect for e-signatures, form authentication, or user confirmations in React applications",
+  "author": "tim-rayner",
+  "license": "MIT",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.esm.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "npm run clean && rollup -c",
+    "prepare": "npm run build",
+    "publish": "npm publish --access public"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.2",
+    "@rollup/plugin-typescript": "^12.1.2",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "rollup": "^4.34.8",
+    "rollup-plugin-css-only": "^4.5.2",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-typescript2": "^0.36.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@rollup/plugin-node-resolve": "^16.0.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4"
+  },
+  "keywords": [
+    "react",
+    "signature",
+    "signature-pad",
+    "scribble",
+    "esignature",
+    "form",
+    "authentication",
+    "signature-capture",
+    "canvas",
+    "component",
+    "ui"
+  ]
+}
