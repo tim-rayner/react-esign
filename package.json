@@ -1,6 +1,6 @@
 {
   "name": "react-esign",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "react-esign is a lightweight, dependency free React component built for capturing handwritten signatures. It provides a simple and responsive signature pad, perfect for e-signatures, form authentication, or user confirmations in React applications",
   "repository": {
     "type": "git",
@@ -31,18 +31,16 @@
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.2",
+    "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-typescript": "^12.1.2",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "rollup": "^4.34.8",
     "rollup-plugin-css-only": "^4.5.2",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-typescript2": "^0.36.0",
     "typescript": "^5.0.0"
-  },
-  "dependencies": {
-    "@rollup/plugin-node-resolve": "^16.0.0",
-    "rollup-plugin-peer-deps-external": "^2.2.4"
   },
   "keywords": [
     "react",
