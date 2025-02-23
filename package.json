@@ -26,14 +26,14 @@
     "prepare": "npm run build"
   },
   "peerDependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react": "^20.0.0",
+    "react-dom": "^20.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.2",
     "@rollup/plugin-typescript": "^12.1.2",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
+    "@types/react": "^20.0.0",
+    "@types/react-dom": "^20.0.0",
     "rollup": "^4.34.8",
     "rollup-plugin-css-only": "^4.5.2",
     "rollup-plugin-postcss": "^4.0.2",
