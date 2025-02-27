@@ -180,7 +180,7 @@ const SignatureInput = ({
   }, [initializeCanvas, redrawCanvasWithSmoothing]);
 
   const handleClear = useCallback((): void => {
-    if (!ctxRef.current) return;
+    if (!ctxRef.current || isDisabled) return;
     ctxRef.current.clearRect(
       0,
       0,
@@ -368,7 +368,7 @@ const SignatureInput = ({
   }, [typedSignature, redrawCanvasWithSmoothing]);
 
   const borderStyles = () => {
-    if (isDrawing) return { borderColor: themeColor };
+    if (isDrawing && !isDisabled) return { borderColor: themeColor };
     if (isDisabled) return { borderColor: "#ccc" };
     if (isError) return { borderColor: "#f44336" };
     return {};
@@ -411,7 +411,7 @@ const SignatureInput = ({
               <>
                 <Button
                   onClick={handleClear}
-                  disabled={!hasStrokes}
+                  disabled={!hasStrokes || isDisabled}
                   style={{ backgroundColor: themeColor }}
                 >
                   Clear
@@ -420,7 +420,10 @@ const SignatureInput = ({
             )}
             {buttonType === "text" && (
               <>
-                <TextButton onClick={handleClear} disabled={!hasStrokes}>
+                <TextButton
+                  onClick={handleClear}
+                  disabled={!hasStrokes || isDisabled}
+                >
                   Clear
                 </TextButton>
               </>

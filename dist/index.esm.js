@@ -129,7 +129,7 @@ const SignatureInput = ({ onChange, isDisabled, isError, width = 450, height = 1
         return () => observer.disconnect();
     }, [initializeCanvas, redrawCanvasWithSmoothing]);
     const handleClear = useCallback(() => {
-        if (!ctxRef.current)
+        if (!ctxRef.current || isDisabled)
             return;
         ctxRef.current.clearRect(0, 0, ctxRef.current.canvas.width, ctxRef.current.canvas.height);
         strokesRef.current = [];
@@ -277,7 +277,7 @@ const SignatureInput = ({ onChange, isDisabled, isError, width = 450, height = 1
         redrawCanvasWithSmoothing();
     }, [typedSignature, redrawCanvasWithSmoothing]);
     const borderStyles = () => {
-        if (isDrawing)
+        if (isDrawing && !isDisabled)
             return { borderColor: themeColor };
         if (isDisabled)
             return { borderColor: "#ccc" };
@@ -294,7 +294,7 @@ const SignatureInput = ({ onChange, isDisabled, isError, width = 450, height = 1
                     gap: 1,
                     justifyContent: "space-between",
                     flexDirection: "column",
-                }, children: [clear && (jsxs(Fragment, { children: [buttonType === "button" && (jsx(Fragment, { children: jsx(Button, { onClick: handleClear, disabled: !hasStrokes, style: { backgroundColor: themeColor }, children: "Clear" }) })), buttonType === "text" && (jsx(Fragment, { children: jsx(TextButton, { onClick: handleClear, disabled: !hasStrokes, children: "Clear" }) }))] })), download && (jsx(Button, { onClick: handleDownload, disabled: !hasStrokes, style: { backgroundColor: themeColor }, children: "Download" }))] })] }));
+                }, children: [clear && (jsxs(Fragment, { children: [buttonType === "button" && (jsx(Fragment, { children: jsx(Button, { onClick: handleClear, disabled: !hasStrokes || isDisabled, style: { backgroundColor: themeColor }, children: "Clear" }) })), buttonType === "text" && (jsx(Fragment, { children: jsx(TextButton, { onClick: handleClear, disabled: !hasStrokes || isDisabled, children: "Clear" }) }))] })), download && (jsx(Button, { onClick: handleDownload, disabled: !hasStrokes, style: { backgroundColor: themeColor }, children: "Download" }))] })] }));
 };
 
 export { SignatureInput, SignatureInput as default };

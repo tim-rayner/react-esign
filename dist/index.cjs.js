@@ -133,7 +133,7 @@ const SignatureInput = ({ onChange, isDisabled, isError, width = 450, height = 1
         return () => observer.disconnect();
     }, [initializeCanvas, redrawCanvasWithSmoothing]);
     const handleClear = react.useCallback(() => {
-        if (!ctxRef.current)
+        if (!ctxRef.current || isDisabled)
             return;
         ctxRef.current.clearRect(0, 0, ctxRef.current.canvas.width, ctxRef.current.canvas.height);
         strokesRef.current = [];
@@ -281,7 +281,7 @@ const SignatureInput = ({ onChange, isDisabled, isError, width = 450, height = 1
         redrawCanvasWithSmoothing();
     }, [typedSignature, redrawCanvasWithSmoothing]);
     const borderStyles = () => {
-        if (isDrawing)
+        if (isDrawing && !isDisabled)
             return { borderColor: themeColor };
         if (isDisabled)
             return { borderColor: "#ccc" };
@@ -298,7 +298,7 @@ const SignatureInput = ({ onChange, isDisabled, isError, width = 450, height = 1
                     gap: 1,
                     justifyContent: "space-between",
                     flexDirection: "column",
-                }, children: [clear && (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [buttonType === "button" && (jsxRuntime.jsx(jsxRuntime.Fragment, { children: jsxRuntime.jsx(Button, { onClick: handleClear, disabled: !hasStrokes, style: { backgroundColor: themeColor }, children: "Clear" }) })), buttonType === "text" && (jsxRuntime.jsx(jsxRuntime.Fragment, { children: jsxRuntime.jsx(TextButton, { onClick: handleClear, disabled: !hasStrokes, children: "Clear" }) }))] })), download && (jsxRuntime.jsx(Button, { onClick: handleDownload, disabled: !hasStrokes, style: { backgroundColor: themeColor }, children: "Download" }))] })] }));
+                }, children: [clear && (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [buttonType === "button" && (jsxRuntime.jsx(jsxRuntime.Fragment, { children: jsxRuntime.jsx(Button, { onClick: handleClear, disabled: !hasStrokes || isDisabled, style: { backgroundColor: themeColor }, children: "Clear" }) })), buttonType === "text" && (jsxRuntime.jsx(jsxRuntime.Fragment, { children: jsxRuntime.jsx(TextButton, { onClick: handleClear, disabled: !hasStrokes || isDisabled, children: "Clear" }) }))] })), download && (jsxRuntime.jsx(Button, { onClick: handleDownload, disabled: !hasStrokes, style: { backgroundColor: themeColor }, children: "Download" }))] })] }));
 };
 
 exports.SignatureInput = SignatureInput;
