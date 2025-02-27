@@ -28,7 +28,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = ".signature-input-container{align-items:flex-start;display:flex;flex-direction:column;height:100%;position:relative}.drawing-canvas{box-sizing:border-box;display:block}.signature-input-container .button{align-self:flex-start;border:none;border-radius:4px;box-shadow:0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12);color:#fff;cursor:pointer;font-size:.875rem;font-weight:500;letter-spacing:.02857em;line-height:1.75;margin:6px 0;padding:6px 16px;transition:background-color .25s cubic-bezier(.4,0,.2,1) 0ms,box-shadow .25s cubic-bezier(.4,0,.2,1) 0ms}.signature-input-container .button:hover{cursor:pointer}.signature-input-container .text-button{background-color:transparent;box-shadow:none;color:#000;padding:2px 6px 2px 0}.signature-input-container .text-button:hover{cursor:pointer}.signature-input-container .text-button:disabled{box-shadow:none;color:rgba(0,0,0,.26);cursor:default}.signature-input-container .button:hover{box-shadow:0 2px 4px -1px rgba(0,0,0,.2),0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12)}.signature-input-container .button:disabled{background-color:rgba(0,0,0,.12);box-shadow:none;color:rgba(0,0,0,.26);cursor:default}.drawing-canvas{background-color:#fff;border:2px solid rgba(0,0,0,.1);border-radius:4px;box-shadow:0 2px 4px rgba(0,0,0,.1);cursor:crosshair}.drawing-canvas.is-drawing{border-color:#1976d2}.drawing-canvas.is-disabled{border-color:#ccc}.drawing-canvas.is-error{border-color:#f44336;cursor:default}@media (max-width:600px){.drawing-canvas{display:block}}";
+var css_248z = ".signature-input-container{align-items:flex-start;display:flex;flex-direction:column;height:100%;position:relative}.drawing-canvas{box-sizing:border-box;display:block}.signature-input-container .button{align-self:flex-start;border:none;border-radius:6px;box-shadow:0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12);color:#fff;cursor:pointer;font-size:.875rem;font-weight:500;letter-spacing:.02857em;line-height:1.75;margin:6px 0;padding:6px 16px;transition:background-color .25s cubic-bezier(.4,0,.2,1) 0ms,box-shadow .25s cubic-bezier(.4,0,.2,1) 0ms}.signature-input-container .button:hover{cursor:pointer}.signature-input-container .text-button{background-color:transparent;box-shadow:none;color:#000;padding:2px 6px 2px 0}.signature-input-container .text-button:hover{cursor:pointer}.signature-input-container .text-button:disabled{box-shadow:none;color:rgba(0,0,0,.26);cursor:default}.signature-input-container .button:hover{box-shadow:0 2px 4px -1px rgba(0,0,0,.2),0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12)}.signature-input-container .button:disabled{background-color:rgba(0,0,0,.12);box-shadow:none;color:rgba(0,0,0,.26);cursor:default}.drawing-canvas{background-color:#fff;border:2px solid rgba(0,0,0,.1);border-radius:6px;box-shadow:0 2px 4px rgba(0,0,0,.1);cursor:crosshair}.drawing-canvas.is-drawing{border-color:#1976d2}.drawing-canvas.is-disabled{border-color:#ccc}.drawing-canvas.is-error{border-color:#f44336;cursor:default}@media (max-width:600px){.drawing-canvas{display:block}}";
 styleInject(css_248z);
 
 const Button = ({ children, onClick, disabled, style }) => {
@@ -139,7 +139,8 @@ const SignatureInput = ({ onChange, isDisabled, isError, width = 450, height = 1
         onChange(undefined);
     }, [onChange]);
     const handlePointerDown = useCallback((event) => {
-        if ((inputMode === "auto" || inputMode === "draw") &&
+        if (!isDisabled &&
+            (inputMode === "auto" || inputMode === "draw") &&
             ctxRef.current &&
             signaturePadRef.current) {
             setIsDrawing(true);
@@ -152,6 +153,8 @@ const SignatureInput = ({ onChange, isDisabled, isError, width = 450, height = 1
         }
     }, [inputMode]);
     const handlePointerMove = useCallback((event) => {
+        if (isDisabled)
+            return;
         if ((inputMode !== "draw" && inputMode !== "auto") ||
             !isDrawing ||
             !ctxRef.current ||

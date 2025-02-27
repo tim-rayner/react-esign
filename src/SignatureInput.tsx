@@ -197,6 +197,7 @@ const SignatureInput = ({
   const handlePointerDown = useCallback(
     (event: PointerEvent): void => {
       if (
+        !isDisabled &&
         (inputMode === "auto" || inputMode === "draw") &&
         ctxRef.current &&
         signaturePadRef.current
@@ -215,6 +216,7 @@ const SignatureInput = ({
 
   const handlePointerMove = useCallback(
     (event: PointerEvent): void => {
+      if (isDisabled) return;
       if (
         (inputMode !== "draw" && inputMode !== "auto") ||
         !isDrawing ||
