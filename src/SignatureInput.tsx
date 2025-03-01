@@ -46,6 +46,7 @@ export type SignatureInputProps = {
   buttonType?: "button" | "text";
   download?: boolean;
   clear?: boolean;
+  style?: React.CSSProperties;
 };
 
 const SignatureInput = ({
@@ -60,6 +61,7 @@ const SignatureInput = ({
   buttonType = "button",
   download = false,
   clear = true,
+  style,
 }: SignatureInputProps) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [hasStrokes, setHasStrokes] = useState(false);
@@ -397,9 +399,10 @@ const SignatureInput = ({
     <div
       className="signature-input-container"
       style={{
-        width: "100%", // Changed from maxWidth to width
+        width: "100%",
         maxWidth: `${width}px`,
-        minWidth: `${Math.min(width, 100)}px`, // Add minimum width
+        minWidth: `${Math.min(width, 100)}px`,
+        ...style,
       }}
     >
       <canvas
@@ -408,9 +411,12 @@ const SignatureInput = ({
         style={{
           touchAction: "none",
           width: "100%",
-          height: "100%", // Added height
+          height: "100%",
           maxWidth: `${width}px`,
           aspectRatio: `${width} / ${height}`,
+          cursor: isDisabled
+            ? "not-allowed"
+            : `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z'/%3E%3C/svg%3E") 0 24, pointer`,
           ...borderStyles(),
         }}
       />
@@ -442,6 +448,7 @@ const SignatureInput = ({
                 <TextButton
                   onClick={handleClear}
                   disabled={!hasStrokes || isDisabled}
+                  style={{ color: themeColor }}
                 >
                   Clear
                 </TextButton>

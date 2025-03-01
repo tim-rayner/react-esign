@@ -41,7 +41,7 @@ const Button = ({ children, onClick, disabled, style }) => {
 const TextButton = ({ children, onClick, disabled, style }) => {
     return (jsxRuntime.jsx("button", { onClick: onClick, disabled: disabled, style: style, className: "text-button", children: children }));
 };
-const SignatureInput = ({ onChange, isDisabled, isError, width = 450, height = 150, themeColor = "#1976d2", strokeWidth = 2, inputMode = "draw", buttonType = "button", download = false, clear = true, }) => {
+const SignatureInput = ({ onChange, isDisabled, isError, width = 450, height = 150, themeColor = "#1976d2", strokeWidth = 2, inputMode = "draw", buttonType = "button", download = false, clear = true, style, }) => {
     const [isDrawing, setIsDrawing] = react.useState(false);
     const [hasStrokes, setHasStrokes] = react.useState(false);
     const signaturePadRef = react.useRef(null);
@@ -304,16 +304,14 @@ const SignatureInput = ({ onChange, isDisabled, isError, width = 450, height = 1
             return { borderColor: "#f44336" };
         return {};
     };
-    return (jsxRuntime.jsxs("div", { className: "signature-input-container", style: {
-            width: "100%", // Changed from maxWidth to width
-            maxWidth: `${width}px`,
-            minWidth: `${Math.min(width, 100)}px`, // Add minimum width
-        }, children: [jsxRuntime.jsx("canvas", { className: `drawing-canvas`, ref: signaturePadRef, style: Object.assign({ touchAction: "none", width: "100%", height: "100%", maxWidth: `${width}px`, aspectRatio: `${width} / ${height}` }, borderStyles()) }), jsxRuntime.jsxs("div", { style: {
+    return (jsxRuntime.jsxs("div", { className: "signature-input-container", style: Object.assign({ width: "100%", maxWidth: `${width}px`, minWidth: `${Math.min(width, 100)}px` }, style), children: [jsxRuntime.jsx("canvas", { className: `drawing-canvas`, ref: signaturePadRef, style: Object.assign({ touchAction: "none", width: "100%", height: "100%", maxWidth: `${width}px`, aspectRatio: `${width} / ${height}`, cursor: isDisabled
+                        ? "not-allowed"
+                        : `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z'/%3E%3C/svg%3E") 0 24, pointer` }, borderStyles()) }), jsxRuntime.jsxs("div", { style: {
                     display: "flex",
                     gap: 1,
                     justifyContent: "space-between",
                     flexDirection: "column",
-                }, children: [clear && (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [buttonType === "button" && (jsxRuntime.jsx(jsxRuntime.Fragment, { children: jsxRuntime.jsx(Button, { onClick: handleClear, disabled: !hasStrokes || isDisabled, style: { backgroundColor: themeColor }, children: "Clear" }) })), buttonType === "text" && (jsxRuntime.jsx(jsxRuntime.Fragment, { children: jsxRuntime.jsx(TextButton, { onClick: handleClear, disabled: !hasStrokes || isDisabled, children: "Clear" }) }))] })), download && (jsxRuntime.jsx(Button, { onClick: handleDownload, disabled: !hasStrokes, style: { backgroundColor: themeColor }, children: "Download" }))] })] }));
+                }, children: [clear && (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [buttonType === "button" && (jsxRuntime.jsx(jsxRuntime.Fragment, { children: jsxRuntime.jsx(Button, { onClick: handleClear, disabled: !hasStrokes || isDisabled, style: { backgroundColor: themeColor }, children: "Clear" }) })), buttonType === "text" && (jsxRuntime.jsx(jsxRuntime.Fragment, { children: jsxRuntime.jsx(TextButton, { onClick: handleClear, disabled: !hasStrokes || isDisabled, style: { color: themeColor }, children: "Clear" }) }))] })), download && (jsxRuntime.jsx(Button, { onClick: handleDownload, disabled: !hasStrokes, style: { backgroundColor: themeColor }, children: "Download" }))] })] }));
 };
 
 exports.SignatureInput = SignatureInput;

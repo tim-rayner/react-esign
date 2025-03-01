@@ -11,6 +11,7 @@ export type SignatureInputProps = {
     buttonType?: "button" | "text";
     download?: boolean;
     clear?: boolean;
+    style?: React.CSSProperties;
 };
-declare const SignatureInput: ({ onChange, isDisabled, isError, width, height, themeColor, strokeWidth, inputMode, buttonType, download, clear, }: SignatureInputProps) => import("react/jsx-runtime").JSX.Element;
+declare const SignatureInput: ({ onChange, isDisabled, isError, width, height, themeColor, strokeWidth, inputMode, buttonType, download, clear, style, }: SignatureInputProps) => import("react/jsx-runtime").JSX.Element;
 export default SignatureInput;
