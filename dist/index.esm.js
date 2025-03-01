@@ -307,6 +307,7 @@ const SignatureInput = ({ onChange, isDisabled, isError, width = 450, height = 1
                     gap: 1,
                     justifyContent: "space-between",
                     flexDirection: "column",
+                    marginTop: "10px",
                 }, children: [clear && (jsxs(Fragment, { children: [buttonType === "button" && (jsx(Fragment, { children: jsx(Button, { onClick: handleClear, disabled: !hasStrokes || isDisabled, style: { backgroundColor: themeColor }, children: "Clear" }) })), buttonType === "text" && (jsx(Fragment, { children: jsx(TextButton, { onClick: handleClear, disabled: !hasStrokes || isDisabled, style: { color: themeColor }, children: "Clear" }) }))] })), download && (jsx(Button, { onClick: handleDownload, disabled: !hasStrokes, style: { backgroundColor: themeColor }, children: "Download" }))] })] }));
 };
 

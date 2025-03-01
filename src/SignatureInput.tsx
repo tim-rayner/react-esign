@@ -428,6 +428,7 @@ const SignatureInput = ({
           gap: 1,
           justifyContent: "space-between",
           flexDirection: "column",
+          marginTop: "10px",
         }}
       >
         {clear && (
