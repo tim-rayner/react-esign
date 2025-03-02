@@ -71,7 +71,6 @@ const SignatureInput = ({
   const currentStrokeRef = useRef<{ x: number; y: number }[]>([]);
   const [typedSignature, setTypedSignature] = useState("");
 
-  // Add these new refs to track scaling
   const scaleRef = useRef<{ x: number; y: number }>({ x: 1, y: 1 });
   const displaySizeRef = useRef<{ width: number; height: number }>({
     width,
@@ -84,7 +83,7 @@ const SignatureInput = ({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Get the container width
+    // Get container width
     const container = canvas.parentElement;
     if (!container) return;
     const containerWidth = container.clientWidth;
@@ -318,7 +317,7 @@ const SignatureInput = ({
     points: { x: number; y: number }[],
     numSegments: number = 10 // Controls smoothness
   ): { x: number; y: number }[] => {
-    if (points.length < 4) return points; // Need at least 4 points for Catmull-Rom
+    if (points.length < 4) return points; // Need at least 4 points for Catmull-Rom to work
 
     let smoothed: { x: number; y: number }[] = [];
     smoothed.push(points[0]); // Keep the first point
