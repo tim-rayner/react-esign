@@ -310,7 +310,7 @@ const SignatureInput = ({ onChange, isDisabled = false, isError = false, width =
                     justifyContent: "space-between",
                     flexDirection: "column",
                     marginTop: "10px",
-                }, children: [clear && (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [buttonType === "button" && (jsxRuntime.jsx(jsxRuntime.Fragment, { children: jsxRuntime.jsx(Button, { onClick: handleClear, disabled: !hasStrokes || isDisabled, style: { backgroundColor: themeColor }, children: "Clear" }) })), buttonType === "text" && (jsxRuntime.jsx(jsxRuntime.Fragment, { children: jsxRuntime.jsx(TextButton, { onClick: handleClear, disabled: !hasStrokes || isDisabled, style: { color: themeColor }, children: "Clear" }) }))] })), download && (jsxRuntime.jsx(Button, { onClick: handleDownload, disabled: !hasStrokes, style: { backgroundColor: themeColor }, children: "Download" }))] })] }));
+                }, children: [clear && (jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [buttonType === "button" && (jsxRuntime.jsx(jsxRuntime.Fragment, { children: jsxRuntime.jsx(Button, { onClick: handleClear, disabled: !hasStrokes || isDisabled, style: { backgroundColor: themeColor }, children: "Clear" }) })), buttonType === "text" && (jsxRuntime.jsx(jsxRuntime.Fragment, { children: jsxRuntime.jsx(TextButton, { onClick: handleClear, disabled: !hasStrokes || isDisabled, style: { color: themeColor, opacity: !hasStrokes ? 0.5 : 1 }, children: "Clear" }) }))] })), download && (jsxRuntime.jsx(Button, { onClick: handleDownload, disabled: !hasStrokes, style: { backgroundColor: themeColor }, children: "Download" }))] })] }));
 };
 
 exports.SignatureInput = SignatureInput;

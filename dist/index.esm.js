@@ -308,7 +308,7 @@ const SignatureInput = ({ onChange, isDisabled = false, isError = false, width =
                     justifyContent: "space-between",
                     flexDirection: "column",
                     marginTop: "10px",
-                }, children: [clear && (jsxs(Fragment, { children: [buttonType === "button" && (jsx(Fragment, { children: jsx(Button, { onClick: handleClear, disabled: !hasStrokes || isDisabled, style: { backgroundColor: themeColor }, children: "Clear" }) })), buttonType === "text" && (jsx(Fragment, { children: jsx(TextButton, { onClick: handleClear, disabled: !hasStrokes || isDisabled, style: { color: themeColor }, children: "Clear" }) }))] })), download && (jsx(Button, { onClick: handleDownload, disabled: !hasStrokes, style: { backgroundColor: themeColor }, children: "Download" }))] })] }));
+                }, children: [clear && (jsxs(Fragment, { children: [buttonType === "button" && (jsx(Fragment, { children: jsx(Button, { onClick: handleClear, disabled: !hasStrokes || isDisabled, style: { backgroundColor: themeColor }, children: "Clear" }) })), buttonType === "text" && (jsx(Fragment, { children: jsx(TextButton, { onClick: handleClear, disabled: !hasStrokes || isDisabled, style: { color: themeColor, opacity: !hasStrokes ? 0.5 : 1 }, children: "Clear" }) }))] })), download && (jsx(Button, { onClick: handleDownload, disabled: !hasStrokes, style: { backgroundColor: themeColor }, children: "Download" }))] })] }));
 };
 
 export { SignatureInput };

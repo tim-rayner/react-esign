@@ -449,7 +449,7 @@ const SignatureInput = ({
                 <TextButton
                   onClick={handleClear}
                   disabled={!hasStrokes || isDisabled}
-                  style={{ color: themeColor }}
+                  style={{ color: themeColor, opacity: !hasStrokes ? 0.5 : 1 }}
                 >
                   Clear
                 </TextButton>
