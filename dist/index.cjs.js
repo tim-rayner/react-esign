@@ -1,7 +1,5 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', { value: true });
-
 var jsxRuntime = require('react/jsx-runtime');
 var react = require('react');
 
@@ -41,7 +39,7 @@ const Button = ({ children, onClick, disabled, style }) => {
 const TextButton = ({ children, onClick, disabled, style }) => {
     return (jsxRuntime.jsx("button", { onClick: onClick, disabled: disabled, style: style, className: "text-button", children: children }));
 };
-const SignatureInput = ({ onChange, isDisabled, isError, width = 450, height = 150, themeColor = "#1976d2", strokeWidth = 2, inputMode = "draw", buttonType = "button", download = false, clear = true, style, }) => {
+const SignatureInput = ({ onChange, isDisabled = false, isError = false, width = 450, height = 150, themeColor = "#1976d2", strokeWidth = 2, inputMode = "draw", buttonType = "button", download = false, clear = true, style, }) => {
     const [isDrawing, setIsDrawing] = react.useState(false);
     const [hasStrokes, setHasStrokes] = react.useState(false);
     const signaturePadRef = react.useRef(null);
@@ -316,5 +314,4 @@ const SignatureInput = ({ onChange, isDisabled, isError, width = 450, height = 1
 };
 
 exports.SignatureInput = SignatureInput;
-exports.default = SignatureInput;
 //# sourceMappingURL=index.cjs.js.map

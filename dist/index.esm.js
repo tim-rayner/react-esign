@@ -37,7 +37,7 @@ const Button = ({ children, onClick, disabled, style }) => {
 const TextButton = ({ children, onClick, disabled, style }) => {
     return (jsx("button", { onClick: onClick, disabled: disabled, style: style, className: "text-button", children: children }));
 };
-const SignatureInput = ({ onChange, isDisabled, isError, width = 450, height = 150, themeColor = "#1976d2", strokeWidth = 2, inputMode = "draw", buttonType = "button", download = false, clear = true, style, }) => {
+const SignatureInput = ({ onChange, isDisabled = false, isError = false, width = 450, height = 150, themeColor = "#1976d2", strokeWidth = 2, inputMode = "draw", buttonType = "button", download = false, clear = true, style, }) => {
     const [isDrawing, setIsDrawing] = useState(false);
     const [hasStrokes, setHasStrokes] = useState(false);
     const signaturePadRef = useRef(null);
@@ -311,5 +311,5 @@ const SignatureInput = ({ onChange, isDisabled, isError, width = 450, height = 1
                 }, children: [clear && (jsxs(Fragment, { children: [buttonType === "button" && (jsx(Fragment, { children: jsx(Button, { onClick: handleClear, disabled: !hasStrokes || isDisabled, style: { backgroundColor: themeColor }, children: "Clear" }) })), buttonType === "text" && (jsx(Fragment, { children: jsx(TextButton, { onClick: handleClear, disabled: !hasStrokes || isDisabled, style: { color: themeColor }, children: "Clear" }) }))] })), download && (jsx(Button, { onClick: handleDownload, disabled: !hasStrokes, style: { backgroundColor: themeColor }, children: "Download" }))] })] }));
 };
 
-export { SignatureInput, SignatureInput as default };
+export { SignatureInput };
 //# sourceMappingURL=index.esm.js.map

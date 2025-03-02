@@ -51,8 +51,8 @@ export type SignatureInputProps = {
 
 const SignatureInput = ({
   onChange,
-  isDisabled,
-  isError,
+  isDisabled = false,
+  isError = false,
   width = 450,
   height = 150,
   themeColor = "#1976d2",
@@ -472,4 +472,4 @@ const SignatureInput = ({
   );
 };
 
-export default SignatureInput;
+export { SignatureInput };
