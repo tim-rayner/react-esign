@@ -42,9 +42,9 @@ const SignatureInput = ({ onChange, isDisabled = false, isError = false, width =
     const [hasStrokes, setHasStrokes] = useState(false);
     const signaturePadRef = useRef(null);
     const ctxRef = useRef(null);
-    const strokesRef = useRef([]); // Stores all stroke paths
-    const currentStrokeRef = useRef([]); // Current stroke
-    const [typedSignature, setTypedSignature] = useState(""); // Holds user-typed signature
+    const strokesRef = useRef([]);
+    const currentStrokeRef = useRef([]);
+    const [typedSignature, setTypedSignature] = useState("");
     // Add these new refs to track scaling
     const scaleRef = useRef({ x: 1, y: 1 });
     const displaySizeRef = useRef({
@@ -197,26 +197,38 @@ const SignatureInput = ({ onChange, isDisabled = false, isError = false, width =
     }, [isDisabled]);
     useEffect(() => {
         if (!signaturePadRef.current)
-            return () => null;
+            return;
         const canvas = signaturePadRef.current;
-        canvas.addEventListener("touchstart", handleTouchStart, { passive: false });
-        canvas.addEventListener("pointerdown", handlePointerDown);
-        canvas.addEventListener("pointermove", handlePointerMove);
-        document.addEventListener("pointerup", handlePointerUp);
-        const cleanup = () => {
+        const attachListeners = () => {
+            canvas.addEventListener("touchstart", handleTouchStart, {
+                passive: false,
+            });
+            canvas.addEventListener("pointerdown", handlePointerDown);
+            canvas.addEventListener("pointermove", handlePointerMove);
+            document.addEventListener("pointerup", handlePointerUp);
+        };
+        const detachListeners = () => {
             canvas.removeEventListener("touchstart", handleTouchStart);
             canvas.removeEventListener("pointerdown", handlePointerDown);
             canvas.removeEventListener("pointermove", handlePointerMove);
             document.removeEventListener("pointerup", handlePointerUp);
         };
-        return cleanup;
+        if (!isDisabled) {
+            attachListeners();
+        }
+        else {
+            detachListeners();
+        }
+        return () => {
+            detachListeners();
+        };
     }, [
         handlePointerDown,
         handlePointerMove,
         handlePointerUp,
         handleTouchStart,
         isDisabled,
-    ]);
+    ]); // ✅ Dependency on isDisabled
     /**
      * Catmull-Rom Splines Algorithm: Smooths the strokes
      */
