@@ -255,7 +255,7 @@ const SignatureInput = ({
     ctxRef.current?.beginPath();
 
     // Convert to File
-    if (signaturePadRef.current) {
+    if (hasStrokes && signaturePadRef.current) {
       signaturePadRef.current.toBlob((blob) => {
         if (blob) {
           const file = new File([blob], "signature.png", { type: "image/png" });
@@ -385,8 +385,7 @@ const SignatureInput = ({
     link.download = "signature.png";
 
     // Get the canvas data as a URL
-    const dataUrl = signaturePadRef.current.toDataURL("image/png");
-    link.href = dataUrl;
+    link.href = signaturePadRef.current.toDataURL("image/png");
 
     // Programmatically click the link to trigger download
     document.body.appendChild(link);
