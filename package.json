@@ -1,6 +1,6 @@
 {
   "name": "react-esign",
-  "version": "1.0.20",
+  "version": "1.0.21",
   "description": "react-esign is a lightweight, dependency free React component built for capturing handwritten signatures. It provides a simple and responsive signature pad, perfect for e-signatures, form authentication, or user confirmations in React applications",
   "repository": {
     "type": "git",
