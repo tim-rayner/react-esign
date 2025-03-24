@@ -37,7 +37,7 @@ const Button = ({ children, onClick, disabled, style }) => {
 const TextButton = ({ children, onClick, disabled, style }) => {
     return (jsx("button", { onClick: onClick, disabled: disabled, style: style, className: "text-button", children: children }));
 };
-const SignatureInput = ({ onChange, isDisabled = false, isError = false, width = 450, height = 150, themeColor = "#1976d2", strokeWidth = 2, inputMode = "type", buttonType = "button", download = false, clear = true, style, }) => {
+const SignatureInput = ({ onChange, isDisabled = false, isError = false, width = 450, height = 150, themeColor = "#1976d2", strokeWidth = 2, inputMode = "draw", buttonType = "button", download = false, clear = true, style, }) => {
     const [isDrawing, setIsDrawing] = useState(false);
     const [hasStrokes, setHasStrokes] = useState(false);
     const signaturePadRef = useRef(null);
