@@ -39,7 +39,7 @@ const Button = ({ children, onClick, disabled, style }) => {
 const TextButton = ({ children, onClick, disabled, style }) => {
     return (jsxRuntime.jsx("button", { onClick: onClick, disabled: disabled, style: style, className: "text-button", children: children }));
 };
-const SignatureInput = ({ onChange, isDisabled = false, isError = false, width = 450, height = 150, themeColor = "#1976d2", strokeWidth = 2, inputMode = "draw", buttonType = "button", download = false, clear = true, style, }) => {
+const SignatureInput = ({ onChange, isDisabled = false, isError = false, width = 450, height = 150, themeColor = "#1976d2", strokeWidth = 2, inputMode = "type", buttonType = "button", download = false, clear = true, style, }) => {
     const [isDrawing, setIsDrawing] = react.useState(false);
     const [hasStrokes, setHasStrokes] = react.useState(false);
     const signaturePadRef = react.useRef(null);
@@ -168,7 +168,7 @@ const SignatureInput = ({ onChange, isDisabled = false, isError = false, width =
         ctxRef.current.stroke();
         currentStrokeRef.current.push({ x, y });
     }, [inputMode, isDrawing]);
-    const handlePointerUp = react.useCallback(() => {
+    const handlePointerUp = react.useCallback((event) => {
         var _a;
         setIsDrawing(false);
         // Save the stroke
@@ -182,13 +182,22 @@ const SignatureInput = ({ onChange, isDisabled = false, isError = false, width =
         }
         (_a = ctxRef.current) === null || _a === void 0 ? void 0 : _a.beginPath();
         // Convert to File
-        if (signaturePadRef.current) {
-            signaturePadRef.current.toBlob((blob) => {
-                if (blob) {
-                    const file = new File([blob], "signature.png", { type: "image/png" });
-                    onChange(file);
-                }
-            });
+        if (strokesRef.current.length > 0 && signaturePadRef.current) {
+            const rect = signaturePadRef.current.getBoundingClientRect();
+            const isWithinBounds = event.clientX >= rect.left &&
+                event.clientX <= rect.right &&
+                event.clientY >= rect.top &&
+                event.clientY <= rect.bottom;
+            if (isWithinBounds) {
+                signaturePadRef.current.toBlob((blob) => {
+                    if (blob) {
+                        const file = new File([blob], "signature.png", {
+                            type: "image/png",
+                        });
+                        onChange(file);
+                    }
+                });
+            }
         }
     }, [onChange]);
     const handleTouchStart = react.useCallback((event) => {

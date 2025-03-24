@@ -57,7 +57,7 @@ const SignatureInput = ({
   height = 150,
   themeColor = "#1976d2",
   strokeWidth = 2,
-  inputMode = "draw",
+  inputMode = "type",
   buttonType = "button",
   download = false,
   clear = true,
@@ -238,32 +238,46 @@ const SignatureInput = ({
     [inputMode, isDrawing]
   );
 
-  const handlePointerUp = useCallback((): void => {
-    setIsDrawing(false);
+  const handlePointerUp = useCallback(
+    (event: PointerEvent): void => {
+      setIsDrawing(false);
 
-    // Save the stroke
-    if (currentStrokeRef.current.length > 1) {
-      strokesRef.current.push([...currentStrokeRef.current]);
-      setHasStrokes(true);
+      // Save the stroke
+      if (currentStrokeRef.current.length > 1) {
+        strokesRef.current.push([...currentStrokeRef.current]);
+        setHasStrokes(true);
 
-      // Smooth strokes and redraw
-      setTimeout(() => {
-        redrawCanvasWithSmoothing();
-      }, 10);
-    }
+        // Smooth strokes and redraw
+        setTimeout(() => {
+          redrawCanvasWithSmoothing();
+        }, 10);
+      }
 
-    ctxRef.current?.beginPath();
+      ctxRef.current?.beginPath();
 
-    // Convert to File
-    if (hasStrokes && signaturePadRef.current) {
-      signaturePadRef.current.toBlob((blob) => {
-        if (blob) {
-          const file = new File([blob], "signature.png", { type: "image/png" });
-          onChange(file);
+      // Convert to File
+      if (strokesRef.current.length > 0 && signaturePadRef.current) {
+        const rect = signaturePadRef.current.getBoundingClientRect();
+        const isWithinBounds =
+          event.clientX >= rect.left &&
+          event.clientX <= rect.right &&
+          event.clientY >= rect.top &&
+          event.clientY <= rect.bottom;
+
+        if (isWithinBounds) {
+          signaturePadRef.current.toBlob((blob) => {
+            if (blob) {
+              const file = new File([blob], "signature.png", {
+                type: "image/png",
+              });
+              onChange(file);
+            }
+          });
         }
-      });
-    }
-  }, [onChange]);
+      }
+    },
+    [onChange]
+  );
 
   const handleTouchStart = useCallback(
     (event: TouchEvent): void => {
@@ -385,7 +399,8 @@ const SignatureInput = ({
     link.download = "signature.png";
 
     // Get the canvas data as a URL
-    link.href = signaturePadRef.current.toDataURL("image/png");
+    const dataUrl = signaturePadRef.current.toDataURL("image/png");
+    link.href = dataUrl;
 
     // Programmatically click the link to trigger download
     document.body.appendChild(link);
